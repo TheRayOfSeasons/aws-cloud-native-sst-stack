@@ -1,0 +1,25 @@
+{
+  "name": "aws-cloud-native-sst-stack",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "sst dev",
+    "build": "sst build",
+    "deploy": "sst deploy",
+    "remove": "sst remove",
+    "console": "sst console",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@aws-cdk/aws-apigatewayv2-alpha": "2.114.1-alpha.0",
+    "@tsconfig/node18": "^18.2.2",
+    "aws-cdk-lib": "2.124.0",
+    "constructs": "10.3.0",
+    "sst": "^2.40.3",
+    "typescript": "^5.3.3"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@aws-cloud-native-sst-stack/core",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "sst bind vitest",
+    "typecheck": "tsc -noEmit",
+    "run-m": "node main.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "sst": "^2.40.3",
+    "vitest": "^1.2.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.515.0",
+    "@aws-sdk/client-dynamodb": "^3.515.0",
+    "@aws-sdk/lib-dynamodb": "^3.515.0",
+    "zod": "^3.22.4"
+  }
+}
