@@ -1,5 +1,6 @@
 import {
   Api,
+  Auth,
   Cognito,
   EventBus,
   Table,
@@ -27,14 +28,24 @@ export function MainStack({ stack }: StackContext) {
     },
   });
 
-  const auth = new Cognito(stack, 'auth', {
-    login: ["email"],
+  const cognito = new Cognito(stack, 'cognito', {
+    login: ['email'],
+    cdk: {
+      userPoolClient: {
+        authFlows: {
+          adminUserPassword: true,
+          userPassword: true,
+          userSrp: true,
+        },
+      },
+    },
   });
 
-  const authEnvironment = {
-    COGNITO_USER_POOL_ID: auth.userPoolId,
-    COGNITO_CLIENT_ID: auth.userPoolClientId,
-  };
+  const auth = new Auth(stack, "auth", {
+    authenticator: {
+      handler: "packages/functions/src/auth/lambda.handler",
+    },
+  });
 
   const api = new Api(stack, "api", {
     cors: {
@@ -49,31 +60,24 @@ export function MainStack({ stack }: StackContext) {
           bus,
           todoTable,
         ],
+        environment: {
+          COGNITO_IDENTITY_POOL_ID: cognito.cognitoIdentityPoolId || '',
+          COGNITO_USER_POOL_ID: cognito.userPoolId || '',
+          COGNITO_CLIENT_ID: cognito.userPoolClientId || '',
+        },
       },
     },
     routes: {
       "GET /": "packages/functions/src/lambda.handler",
-      "POST /auth": {
-        function: "packages/functions/src/auth.auth",
-        authorizer: "none",
-        environment: authEnvironment,
-      },
-      "POST /register": {
-        function: "packages/functions/src/auth.register",
-        authorizer: "none",
-        environment: authEnvironment,
-      },
-      "POST /change-password": {
-        function: "packages/functions/src/auth.changePassword",
-        authorizer: "none",
-        environment: authEnvironment,
-      },
       "GET /note/{id}": "packages/functions/src/note.get",
       "POST /note": "packages/functions/src/note.create",
     },
   });
 
-  auth.attachPermissionsForAuthUsers(stack, [api]);
+  auth.attach(stack, {
+    api,
+    prefix: '/auth',
+  });
 
   bus.subscribe("note.created", {
     handler: "packages/functions/src/events/note-created.handler",
@@ -91,8 +95,8 @@ export function MainStack({ stack }: StackContext) {
   stack.addOutputs({
     ApiEndpoint: api.url,
     WebEndpoint: web.url,
-    IdentityPoolId: auth.cognitoIdentityPoolId,
-    UserPoolId: auth.userPoolId,
-    UserPoolClientId: auth.userPoolClientId,
+    IdentityPoolId: cognito.cognitoIdentityPoolId,
+    UserPoolId: cognito.userPoolId,
+    UserPoolClientId: cognito.userPoolClientId,
   });
 }

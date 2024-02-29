@@ -1,10 +1,13 @@
-export * as Auth from "./note";
+export * as Auth from "./auth";
 import {
   AuthFlowType,
   CognitoIdentityProviderClient,
-  AdminSetUserPasswordCommand,
   InitiateAuthCommand,
   SignUpCommand,
+  ConfirmSignUpCommand,
+  ForgotPasswordCommand,
+  ConfirmForgotPasswordCommand,
+  GetUserCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 
 const client = new CognitoIdentityProviderClient({
@@ -44,15 +47,53 @@ export const register = async ({
   return response;
 }
 
-export const adminChangePassword = async ({
+export const confirmSignUpCommand = async ({
   email,
-  password,
-}: Credentials) => {
-  const command = new AdminSetUserPasswordCommand({
-    UserPoolId: COGNITO_USER_POOL_ID,
+  code,
+}: {
+  email: string,
+  code: string
+}) => {
+  const command = new ConfirmSignUpCommand({
+    ClientId: COGNITO_CLIENT_ID,
+    ConfirmationCode: code,
     Username: email,
-    Password: password,
-    Permanent: false,
+  });
+  const response = await client.send(command);
+  return response;
+};
+
+export const forgotPassword = async (email: string) => {
+  const command = new ForgotPasswordCommand({
+    ClientId: COGNITO_CLIENT_ID,
+    Username: email,
+  });
+  const response = await client.send(command);
+  return response;
+}
+
+export const confirmForgotPassword = async ({
+  email,
+  code,
+  newPassword,
+}: {
+  email: string,
+  code: string,
+  newPassword: string,
+}) => {
+  const command = new ConfirmForgotPasswordCommand({
+    ClientId: COGNITO_CLIENT_ID,
+    Username: email,
+    ConfirmationCode: code,
+    Password: newPassword,
+  });
+  const response = await client.send(command);
+  return response;
+}
+
+export const getCurrentUser = async (token: string) => {
+  const command = new GetUserCommand({
+    AccessToken: token,
   });
   const response = await client.send(command);
   return response;
