@@ -1,7 +1,8 @@
 import { ApiHandler } from "sst/node/api";
 import { Note } from "@aws-cloud-native-sst-stack/core/note";
+import { AuthorizedHandler } from "./middleware/session";
 
-export const create = ApiHandler(async (evt) => {
+export const create = AuthorizedHandler(async (evt) => {
   const body = JSON.parse(evt.body || '');
   await Note.create(body);
 
@@ -9,9 +10,11 @@ export const create = ApiHandler(async (evt) => {
     statusCode: 201,
     body: JSON.stringify(evt),
   };
+}, {
+  authorizedUsers: ['user'],
 });
 
-export const get = ApiHandler(async (evt) => {
+export const get = AuthorizedHandler(async (evt) => {
   const id = evt.pathParameters?.id || '';
   if (id) {
     const data = await Note.get(id);
@@ -28,4 +31,6 @@ export const get = ApiHandler(async (evt) => {
       message: "Not Found",
     }),
   }
+}, {
+  authorizedUsers: ['user'],
 });
