@@ -10,13 +10,6 @@ declare module 'sst/node/auth' {
   export interface SessionTypes {
     public: {},
     user: {
-      CognitoAuthenticationResult: {
-        AccessToken?: string
-        ExpiresIn?: number
-        IdToken?: string
-        RefreshToken?: string
-        TokenType?: string
-      },
       userId: string
       email: string
     };
@@ -74,7 +67,6 @@ const actions: Record<string, AuthAction<any | z.ZodType>> = {
         const token = Session.create({
           type: 'user',
           properties: {
-            CognitoAuthenticationResult: response.AuthenticationResult,
             email,
             userId,
           },

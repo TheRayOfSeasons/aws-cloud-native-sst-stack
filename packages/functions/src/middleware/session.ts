@@ -8,8 +8,8 @@ export type Options = {
 }
 
 export function AuthorizedHandler(
+  options: Options,
   callback: Parameters<typeof Handler<"api">>[1],
-  options: Options
 ): (event: APIGatewayProxyEventV2, context: Context) => Promise<APIGatewayProxyStructuredResultV2> {
   const handler = ApiHandler(async (evt, ctx) => {
     const session = useSession();
