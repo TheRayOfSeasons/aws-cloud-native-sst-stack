@@ -111,6 +111,18 @@ const actions: Record<string, AuthAction<any | z.ZodType>> = {
       };
     },
   }),
+  resendCode: createAction({
+    schema: z.object({
+      email: z.string(),
+    }),
+    callback: async(body) => {
+      const response = await Auth.resendCode(body);
+      return {
+        statusCode: 200,
+        body: JSON.stringify(response),
+      };
+    }
+  }),
   forgotPassword: createAction({
     schema: z.object({
       email: z.string(),

@@ -8,6 +8,7 @@ import {
   ForgotPasswordCommand,
   ConfirmForgotPasswordCommand,
   GetUserCommand,
+  ResendConfirmationCodeCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 
 const client = new CognitoIdentityProviderClient({
@@ -42,6 +43,19 @@ export const register = async ({
     ClientId: COGNITO_CLIENT_ID,
     Username: email,
     Password: password,
+  });
+  const response = await client.send(command);
+  return response;
+}
+
+export const resendCode = async ({
+  email,
+}: {
+  email: string
+}) => {
+  const command = new ResendConfirmationCodeCommand({
+    ClientId: COGNITO_CLIENT_ID,
+    Username: email,
   });
   const response = await client.send(command);
   return response;
