@@ -49,7 +49,7 @@ export async function create(note: NoteDto) {
   const command = new PutCommand({
     TableName: Table.Notes.tableName,
     Item: item,
-    ReturnValues: 'ALL_NEW'
+    ReturnValues: 'ALL_OLD',
   });
   const response = await docClient.send(command);
   await Events.Created.publish(item);
