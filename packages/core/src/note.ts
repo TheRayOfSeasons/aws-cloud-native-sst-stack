@@ -60,14 +60,13 @@ export async function update(id: string, note: NoteDto) {
     TableName: Table.Notes.tableName,
     Key: {
       id,
+      userId: note.userId,
     },
-    UpdateExpression:
-     + 'set user = :user,'
-     + 'set title = :title,'
-     + 'set content = :content,'
-     + 'set dateUpdated = :dateUpdated',
+    UpdateExpression: 'set'
+     + ' title = :title,'
+     + ' content = :content,'
+     + ' dateUpdated = :dateUpdated',
     ExpressionAttributeValues: {
-      ':user': note.userId,
       ':title': note.title,
       ':content': note.content,
       ':dateUpdated': createTimestamp(),
