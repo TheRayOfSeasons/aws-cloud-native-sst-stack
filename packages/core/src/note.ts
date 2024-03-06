@@ -49,11 +49,10 @@ export async function create(note: NoteDto) {
   const command = new PutCommand({
     TableName: Table.Notes.tableName,
     Item: item,
-    ReturnValues: 'ALL_OLD',
   });
   const response = await docClient.send(command);
   await Events.Created.publish(item);
-  return response.Attributes;
+  return response;
 }
 
 export async function update(id: string, note: NoteDto) {
@@ -90,6 +89,7 @@ export async function get(id: string) {
   return response.Item;
 }
 
+// TODO: Implement pagination
 export async function list({
   userId,
 }: {
@@ -98,13 +98,15 @@ export async function list({
   const command = new QueryCommand({
     TableName: Table.Notes.tableName,
     KeyConditionExpression: 'userId = :userId',
+    IndexName: 'dateCreatedIndex',
     ExpressionAttributeValues: {
-      ':userId': {
-        S: userId,
-      },
+      ':userId': userId,
     },
-    ProjectionExpression: 'id, title',
+    ProjectionExpression: 'id, userId, title',
   });
   const response = await docClient.send(command);
-  return response.Items;
+  return {
+    count: response.Count,
+    data: response.Items,
+  };
 }

@@ -112,7 +112,7 @@ export const list = createHandler({
   },
   handler: async () => {
     const session = useSession();
-    const response = Note.list({
+    const response = await Note.list({
       // @ts-ignore
       userId: session.properties.userId,
     });
