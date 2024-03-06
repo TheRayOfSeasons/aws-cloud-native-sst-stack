@@ -6,25 +6,35 @@ import {
   Table,
   StackContext,
   StaticSite,
-} from "sst/constructs";
-import { CorsHttpMethod } from "@aws-cdk/aws-apigatewayv2-alpha";
+} from 'sst/constructs';
+import { CorsHttpMethod } from '@aws-cdk/aws-apigatewayv2-alpha';
 
 export function MainStack({ stack }: StackContext) {
-  const bus = new EventBus(stack, "bus", {
+  const bus = new EventBus(stack, 'bus', {
     defaults: {
       retries: 10,
     },
   });
 
-  const todoTable = new Table(stack, "Notes", {
+  const noteTable = new Table(stack, 'Notes', {
     fields: {
-      id: "string",
-      user: "string",
-      title: "string",
-      content: "string",
+      id: 'string',
+      userId: 'string',
+      title: 'string',
+      content: 'string',
+      dateCreated: 'string',
+      dateUpdated: 'string',
     },
     primaryIndex: {
-      partitionKey: "id",
+      partitionKey: 'id',
+      sortKey: 'userId',
+    },
+    globalIndexes: {
+      dateCreatedIndex: {
+        partitionKey: 'userId',
+        sortKey: 'dateCreated',
+        projection: 'all',
+      }
     },
   });
 
@@ -41,13 +51,13 @@ export function MainStack({ stack }: StackContext) {
     },
   });
 
-  const auth = new Auth(stack, "auth", {
+  const auth = new Auth(stack, 'auth', {
     authenticator: {
-      handler: "packages/functions/src/auth/lambda.handler",
+      handler: 'packages/functions/src/auth/lambda.handler',
     },
   });
 
-  const api = new Api(stack, "api", {
+  const api = new Api(stack, 'api', {
     cors: {
       allowMethods: [
         CorsHttpMethod.GET,
@@ -58,7 +68,7 @@ export function MainStack({ stack }: StackContext) {
       function: {
         bind: [
           bus,
-          todoTable,
+          noteTable,
         ],
         environment: {
           COGNITO_IDENTITY_POOL_ID: cognito.cognitoIdentityPoolId || '',
@@ -68,9 +78,11 @@ export function MainStack({ stack }: StackContext) {
       },
     },
     routes: {
-      "GET /": "packages/functions/src/lambda.handler",
-      "GET /note/{id}": "packages/functions/src/note.get",
-      "POST /note": "packages/functions/src/note.create",
+      'GET /': 'packages/functions/src/lambda.handler',
+      'POST /note': 'packages/functions/src/note.create',
+      'PUT /note/{id}': 'packages/functions/src/note.update',
+      'GET /note/{id}': 'packages/functions/src/note.get',
+      'GET /note': 'packages/functions/src/note.list',
     },
   });
 
@@ -79,14 +91,14 @@ export function MainStack({ stack }: StackContext) {
     prefix: '/auth',
   });
 
-  bus.subscribe("note.created", {
-    handler: "packages/functions/src/events/note-created.handler",
+  bus.subscribe('note.created', {
+    handler: 'packages/functions/src/events/note-created.handler',
   });
 
-  const web = new StaticSite(stack, "web", {
-    path: "packages/web",
-    buildOutput: "dist",
-    buildCommand: "npm run build",
+  const web = new StaticSite(stack, 'web', {
+    path: 'packages/web',
+    buildOutput: 'dist',
+    buildCommand: 'npm run build',
     environment: {
       VITE_APP_API_URL: api.url,
     },
