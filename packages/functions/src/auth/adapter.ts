@@ -1,6 +1,6 @@
 import { createAdapter, Adapter, Session } from 'sst/node/auth';
-import { APIGatewayProxyStructuredResultV2 } from "aws-lambda";
-import { Auth } from "@aws-cloud-native-sst-stack/core/auth";
+import { APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
+import { Auth } from '@aws-cloud-native-sst-stack/core/auth';
 import { useJsonBody, usePath } from 'sst/node/api';
 import { z } from 'zod';
 
