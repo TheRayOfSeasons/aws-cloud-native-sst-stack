@@ -10,6 +10,7 @@ import {
   DynamoDBDocumentClient,
   QueryCommand,
   UpdateCommand,
+  DeleteCommand,
 } from '@aws-sdk/lib-dynamodb';
 import { DateTime } from 'luxon';
 
@@ -114,4 +115,22 @@ export async function list({
     count: response.Count,
     data: response.Items,
   };
+}
+
+export async function remove({
+  id,
+  userId,
+}: {
+  id: string
+  userId: string
+}) {
+  const command = new DeleteCommand({
+    TableName: Table.Notes.tableName,
+    Key: {
+      id,
+      userId,
+    },
+  });
+  const response = await docClient.send(command);
+  return response;
 }

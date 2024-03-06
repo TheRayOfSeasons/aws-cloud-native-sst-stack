@@ -125,3 +125,30 @@ export const list = createHandler({
     };
   },
 });
+
+export const remove = createHandler({
+  auth: {
+    allowedUserTypes: ['user'],
+  },
+  handler: async ({ pathParameters }) => {
+    const id = pathParameters?.id || '';
+    if (!id) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: 'Missing ID',
+        }),
+      }
+    }
+    const session = useSession();
+    const response = await Note.remove({
+      id,
+      // @ts-ignore
+      userId: session.properties.userId,
+    });
+    return {
+      statusCode: 201,
+      body: JSON.stringify(response),
+    };
+  },
+});

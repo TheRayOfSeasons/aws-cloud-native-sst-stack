@@ -83,6 +83,7 @@ export function MainStack({ stack }: StackContext) {
       'PUT /note/{id}': 'packages/functions/src/note.update',
       'GET /note/{id}': 'packages/functions/src/note.get',
       'GET /note': 'packages/functions/src/note.list',
+      'DELETE /note/{id}': 'packages/functions/src/note.remove',
     },
   });
 
