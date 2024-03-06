@@ -8,6 +8,7 @@
     "run-m": "node main.js"
   },
   "devDependencies": {
+    "@types/luxon": "^3.4.2",
     "@types/node": "^20.11.17",
     "sst": "^2.40.3",
     "vitest": "^1.2.2"
@@ -16,6 +17,7 @@
     "@aws-sdk/client-cognito-identity-provider": "^3.515.0",
     "@aws-sdk/client-dynamodb": "^3.515.0",
     "@aws-sdk/lib-dynamodb": "^3.515.0",
+    "luxon": "^3.4.4",
     "zod": "^3.22.4"
   }
 }

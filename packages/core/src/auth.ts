@@ -1,4 +1,4 @@
-export * as Auth from "./auth";
+export * as Auth from './auth';
 import {
   AuthFlowType,
   CognitoIdentityProviderClient,
@@ -8,7 +8,7 @@ import {
   ForgotPasswordCommand,
   ConfirmForgotPasswordCommand,
   GetUserCommand,
-} from "@aws-sdk/client-cognito-identity-provider";
+} from '@aws-sdk/client-cognito-identity-provider';
 
 const client = new CognitoIdentityProviderClient({
   region: process.env.AWS_REGION || 'us-east-1',
