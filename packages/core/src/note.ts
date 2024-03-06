@@ -95,7 +95,6 @@ export async function get({
   return response.Item;
 }
 
-// TODO: Implement pagination
 export async function list({
   userId,
 }: {
