@@ -77,11 +77,18 @@ export async function update(id: string, note: NoteDto) {
   return response.Attributes;
 }
 
-export async function get(id: string) {
+export async function get({
+  id,
+  userId,
+}: {
+  id: string
+  userId: string
+}) {
   const command = new GetCommand({
     TableName: Table.Notes.tableName,
     Key: {
       id,
+      userId,
     },
   });
   const response = await docClient.send(command);

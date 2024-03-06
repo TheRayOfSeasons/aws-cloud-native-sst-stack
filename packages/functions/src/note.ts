@@ -80,14 +80,17 @@ export const get = createHandler({
       }),
     };
     if (id) {
-      const data = await Note.get(id);
-      if (!data) {
-        return notFoundResponse;
-      }
       const session = useSession();
       // @ts-ignore
       const userId = session.properties.userId;
-      if (data.user !== userId) {
+      const data = await Note.get({
+        id,
+        userId,
+      });
+      if (!data) {
+        return notFoundResponse;
+      }
+      if (data.userId !== userId) {
         return {
           statusCode: 403,
           body: JSON.stringify({
