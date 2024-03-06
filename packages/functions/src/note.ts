@@ -31,6 +31,42 @@ export const create = createHandler({
   },
 });
 
+export const update = createHandler({
+  auth: {
+    allowedUserTypes: ['user'],
+  },
+  body: {
+    schema: z.object({
+      title: z.string(),
+      content: z.string(),
+    }),
+  },
+  handler: async ({ pathParameters }) => {
+    const id = pathParameters?.id || '';
+    if (!id) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: 'Missing ID',
+        }),
+      }
+    }
+    const body = useJsonBody();
+    const session = useSession();
+    const response = await Note.update(id, {
+      // @ts-ignore
+      userId: session.properties.userId,
+      title: body.title,
+      content: body.content,
+    });
+
+    return {
+      statusCode: 201,
+      body: JSON.stringify(response),
+    };
+  },
+});
+
 export const get = createHandler({
   auth: {
     allowedUserTypes: ['user'],
