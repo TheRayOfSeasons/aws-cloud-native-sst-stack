@@ -53,7 +53,7 @@ const createAction = <T extends z.ZodType>({
 };
 
 const actions: Record<string, AuthAction<any | z.ZodType>> = {
-  auth: createAction({
+  login: createAction({
     schema: z.object({
       email: z.string(),
       password: z.string()
