@@ -30,6 +30,8 @@ interface Actions {
 
 interface AuthState extends State, Actions {}
 
+const authService = new AuthService(ky.extend({}));
+
 export const useAuth = create<AuthState>((set) => ({
   token: '',
   user: {
@@ -138,26 +140,3 @@ export const useAuth = create<AuthState>((set) => ({
     });
   },
 }));
-
-export const kyInstance = ky.extend({
-  // @ts-expect-error VITE_APP_API_URL is guaranteed by SST stack definition
-  prefixUrl: import.meta?.VITE_APP_API_URL ?? '',
-  hooks: {
-    beforeRequest: [
-      async (request) => {
-        const { token } = useAuth();
-        request.headers.set('authorization', `Bearer ${token}`);
-      },
-    ],
-    afterResponse: [
-      async (request, options, response) => {
-        if (response.status === 401) {
-          const { logout } = useAuth();
-          logout();
-        }
-      }
-    ]
-  }
-});
-
-const authService = new AuthService(kyInstance);
