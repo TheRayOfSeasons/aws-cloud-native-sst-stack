@@ -5,6 +5,6 @@ export const handler = ApiHandler(async (_evt) => {
   const session = useSession();
   return {
     statusCode: 200,
-    body: JSON.stringify(session),
-  }
+    body: JSON.stringify(session)
+  };
 });

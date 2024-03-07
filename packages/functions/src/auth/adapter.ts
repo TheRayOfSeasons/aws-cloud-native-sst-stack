@@ -1,5 +1,5 @@
-import { createAdapter, Adapter, Session } from 'sst/node/auth';
-import { APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
+import { createAdapter, type Adapter, Session } from 'sst/node/auth';
+import { type APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import { Auth } from '@aws-cloud-native-sst-stack/core/auth';
 import { useJsonBody, usePath } from 'sst/node/api';
 import { z } from 'zod';
@@ -8,11 +8,12 @@ type AuthAction<T extends z.ZodType> = (body: z.infer<T>) => Promise<APIGatewayP
 
 declare module 'sst/node/auth' {
   export interface SessionTypes {
-    public: {},
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    public: {}
     user: {
       userId: string
       email: string
-    };
+    }
   }
 }
 
@@ -20,7 +21,7 @@ const createAction = <T extends z.ZodType>({
   schema,
   callback
 }: {
-  schema: T,
+  schema: T
   callback: AuthAction<T>
 }): AuthAction<T> => {
   return async (body: z.infer<typeof schema>) => {
@@ -30,8 +31,8 @@ const createAction = <T extends z.ZodType>({
       return {
         statusCode: 400,
         body: JSON.stringify({
-          error: 'Received invalid request body.',
-        }),
+          error: 'Received invalid request body.'
+        })
       };
     }
     let response: APIGatewayProxyStructuredResultV2;
@@ -39,116 +40,116 @@ const createAction = <T extends z.ZodType>({
       response = await callback(body);
     } catch (error) {
       return {
-        //@ts-ignore
+        // @ts-expect-error A conditional retrieval if available
         statusCode: error?.$metadata?.httpStatusCode || 500,
         body: JSON.stringify({
-          //@ts-ignore
-          error: error?.message || error?.Message || error?.errorMessage || 'Internal Server Error',
-        }),
+          // @ts-expect-error A conditional retrieval if available
+          error: error?.message || error?.Message || error?.errorMessage || 'Internal Server Error'
+        })
       };
     }
     return response;
-  }
-}
+  };
+};
 
 const actions: Record<string, AuthAction<any | z.ZodType>> = {
   auth: createAction({
     schema: z.object({
       email: z.string(),
-      password: z.string(),
+      password: z.string()
     }),
     callback: async (body) => {
       const response = await Auth.login(body);
-      const cognitoAccessToken = response.AuthenticationResult?.AccessToken || '';
+      const cognitoAccessToken = response.AuthenticationResult?.AccessToken ?? '';
       if (response.AuthenticationResult?.AccessToken) {
         const user = await Auth.getCurrentUser(cognitoAccessToken);
-        const email = user.UserAttributes?.find((attr) => attr.Name === 'email')?.Value || '';
-        const userId = user.Username || '';
+        const email = user.UserAttributes?.find((attr) => attr.Name === 'email')?.Value ?? '';
+        const userId = user.Username ?? '';
         const token = Session.create({
           type: 'user',
           properties: {
             email,
-            userId,
-          },
+            userId
+          }
         });
         return {
           statusCode: 200,
           body: JSON.stringify({
             token,
-            email,
-          }),
-        }
+            email
+          })
+        };
       }
       return {
         statusCode: 200,
-        body: JSON.stringify(response),
+        body: JSON.stringify(response)
       };
-    },
+    }
   }),
   register: createAction({
     schema: z.object({
       email: z.string(),
-      password: z.string(),
+      password: z.string()
     }),
     callback: async (body) => {
       const response = await Auth.register(body);
       return {
         statusCode: 200,
-        body: JSON.stringify(response),
+        body: JSON.stringify(response)
       };
-    },
+    }
   }),
   confirm: createAction({
     schema: z.object({
       email: z.string(),
-      code: z.string(),
+      code: z.string()
     }),
     callback: async (body) => {
       const response = await Auth.confirmSignUpCommand(body);
       return {
         statusCode: 200,
-        body: JSON.stringify(response),
+        body: JSON.stringify(response)
       };
-    },
+    }
   }),
   resendCode: createAction({
     schema: z.object({
-      email: z.string(),
+      email: z.string()
     }),
-    callback: async(body) => {
+    callback: async (body) => {
       const response = await Auth.resendCode(body);
       return {
         statusCode: 200,
-        body: JSON.stringify(response),
+        body: JSON.stringify(response)
       };
     }
   }),
   forgotPassword: createAction({
     schema: z.object({
-      email: z.string(),
+      email: z.string()
     }),
     callback: async ({ email }) => {
       const response = await Auth.forgotPassword(email);
       return {
         statusCode: 200,
-        body: JSON.stringify(response),
+        body: JSON.stringify(response)
       };
-    },
+    }
   }),
   confirmForgotPassword: createAction({
     schema: z.object({
       email: z.string(),
       code: z.string(),
-      newPassword: z.string(),
+      newPassword: z.string()
     }),
     callback: async (body) => {
       const response = await Auth.confirmForgotPassword(body);
       return {
         statusCode: 200,
-        body: JSON.stringify(response),
+        body: JSON.stringify(response)
       };
     }
-  }),
+  })
 };
 
 const adapter: Adapter = async () => {
@@ -159,12 +160,12 @@ const adapter: Adapter = async () => {
     return {
       statusCode: 400,
       body: JSON.stringify({
-        error: `Action /${key} not found.`,
-      }),
-    }
+        error: `Action /${key} not found.`
+      })
+    };
   }
   const response = await action(body);
   return response;
-}
+};
 
 export const CognitoAdapter = createAdapter(() => adapter);

@@ -14,5 +14,14 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'semi': [1, 'always'],
+    '@typescript-eslint/semi': [1, 'always'],
+    'no-restricted-syntax': 'off',
+    'import/prefer-default-export': 'off',
+    'max-classes-per-file': 'off',
+    'no-plusplus': 'off',
+    'no-continue': 'off',
+    'no-param-reassign': 'off',
+    '@typescript-eslint/strict-boolean-expressions': 'off'
   },
 }

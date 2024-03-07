@@ -1,8 +1,8 @@
-import { Handler } from 'sst/context/handler';
-import type { Middleware } from './types';
+import { type Handler } from 'sst/context/handler';
+import type { Middleware, MiddlewareWrapper } from './types';
 import { ApiHandler } from 'sst/node/api';
 
-export const wrapMiddleware = (handler: Parameters<typeof Handler<'api'>>[1]) => {
+export const wrapMiddleware = (handler: Parameters<typeof Handler<'api'>>[1]): MiddlewareWrapper => {
   const middlewares: Middleware[] = [];
   const wrappedHandler = ApiHandler(async (event, context) => {
     for (const middleware of middlewares) {
@@ -19,7 +19,7 @@ export const wrapMiddleware = (handler: Parameters<typeof Handler<'api'>>[1]) =>
         const modifiedResponse = await middleware.after({
           event,
           context,
-          response,
+          response
         });
         if (modifiedResponse) {
           response = modifiedResponse;
@@ -31,9 +31,9 @@ export const wrapMiddleware = (handler: Parameters<typeof Handler<'api'>>[1]) =>
 
   return {
     handler: wrappedHandler,
-    use(middleware: Middleware) {
+    use (middleware: Middleware) {
       middlewares.push(middleware);
       return this;
-    },
-  }
-}
+    }
+  };
+};

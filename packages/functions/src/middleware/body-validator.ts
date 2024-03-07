@@ -1,10 +1,10 @@
 import { useJsonBody } from 'sst/node/api';
-import { z } from 'zod';
+import { type z } from 'zod';
 import type { Middleware, BeforeMiddlewareFunction } from './types';
 
-export type Options<T extends z.ZodType> = {
+export interface Options<T extends z.ZodType> {
   schema: T
-}
+};
 
 export const bodyValidator = <T extends z.ZodType>(options: Options<T>): Middleware => {
   const before: BeforeMiddlewareFunction = async () => {
@@ -15,13 +15,13 @@ export const bodyValidator = <T extends z.ZodType>(options: Options<T>): Middlew
       return {
         statusCode: 400,
         body: JSON.stringify({
-          error: 'Received invalid request body.',
-        }),
+          error: 'Received invalid request body.'
+        })
       };
     }
-  }
+  };
 
   return {
-    before,
-  }
-}
+    before
+  };
+};

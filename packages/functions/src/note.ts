@@ -6,86 +6,86 @@ import { useSession } from 'sst/node/auth';
 
 export const create = createHandler({
   auth: {
-    allowedUserTypes: ['user'],
+    allowedUserTypes: ['user']
   },
   body: {
     schema: z.object({
       title: z.string(),
-      content: z.string(),
-    }),
+      content: z.string()
+    })
   },
   handler: async () => {
     const body = useJsonBody();
     const session = useSession();
     const response = await Note.create({
-      // @ts-ignore
+      // @ts-expect-error TODO: To fix typing
       userId: session.properties.userId,
       title: body.title,
-      content: body.content,
+      content: body.content
     });
 
     return {
       statusCode: 201,
-      body: JSON.stringify(response),
+      body: JSON.stringify(response)
     };
-  },
+  }
 });
 
 export const update = createHandler({
   auth: {
-    allowedUserTypes: ['user'],
+    allowedUserTypes: ['user']
   },
   body: {
     schema: z.object({
       title: z.string(),
-      content: z.string(),
-    }),
+      content: z.string()
+    })
   },
   handler: async ({ pathParameters }) => {
-    const id = pathParameters?.id || '';
+    const id = pathParameters?.id ?? '';
     if (!id) {
       return {
         statusCode: 400,
         body: JSON.stringify({
-          message: 'Missing ID',
-        }),
-      }
+          message: 'Missing ID'
+        })
+      };
     }
     const body = useJsonBody();
     const session = useSession();
     const response = await Note.update(id, {
-      // @ts-ignore
+      // @ts-expect-error TODO: To fix typing
       userId: session.properties.userId,
       title: body.title,
-      content: body.content,
+      content: body.content
     });
 
     return {
       statusCode: 201,
-      body: JSON.stringify(response),
+      body: JSON.stringify(response)
     };
-  },
+  }
 });
 
 export const get = createHandler({
   auth: {
-    allowedUserTypes: ['user'],
+    allowedUserTypes: ['user']
   },
   handler: async ({ pathParameters }) => {
-    const id = pathParameters?.id || '';
+    const id = pathParameters?.id ?? '';
     const notFoundResponse = {
       statusCode: 404,
       body: JSON.stringify({
-        message: 'Not Found',
-      }),
+        message: 'Not Found'
+      })
     };
     if (id) {
       const session = useSession();
-      // @ts-ignore
+      // @ts-expect-error TODO: To fix typing
       const userId = session.properties.userId;
       const data = await Note.get({
         id,
-        userId,
+        userId
       });
       if (!data) {
         return notFoundResponse;
@@ -94,61 +94,61 @@ export const get = createHandler({
         return {
           statusCode: 403,
           body: JSON.stringify({
-            message: 'Forbidden',
+            message: 'Forbidden'
           })
-        }
+        };
       }
       return {
         statusCode: 200,
         body: JSON.stringify({
-          data,
-        }),
-      }
+          data
+        })
+      };
     }
     return notFoundResponse;
-  },
+  }
 });
 
 export const list = createHandler({
   auth: {
-    allowedUserTypes: ['user'],
+    allowedUserTypes: ['user']
   },
   handler: async () => {
     const session = useSession();
     const response = await Note.list({
-      // @ts-ignore
-      userId: session.properties.userId,
+      // @ts-expect-error TODO: To fix typing
+      userId: session.properties.userId
     });
     return {
       statusCode: 201,
-      body: JSON.stringify(response),
+      body: JSON.stringify(response)
     };
-  },
+  }
 });
 
 export const remove = createHandler({
   auth: {
-    allowedUserTypes: ['user'],
+    allowedUserTypes: ['user']
   },
   handler: async ({ pathParameters }) => {
-    const id = pathParameters?.id || '';
+    const id = pathParameters?.id ?? '';
     if (!id) {
       return {
         statusCode: 400,
         body: JSON.stringify({
-          message: 'Missing ID',
-        }),
-      }
+          message: 'Missing ID'
+        })
+      };
     }
     const session = useSession();
     const response = await Note.remove({
       id,
-      // @ts-ignore
-      userId: session.properties.userId,
+      // @ts-expect-error TODO: To fix typing
+      userId: session.properties.userId
     });
     return {
       statusCode: 201,
-      body: JSON.stringify(response),
+      body: JSON.stringify(response)
     };
-  },
+  }
 });

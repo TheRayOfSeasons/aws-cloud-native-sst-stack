@@ -3,6 +3,6 @@ import { CognitoAdapter } from './adapter';
 
 export const handler = AuthHandler({
   providers: {
-    cognito: CognitoAdapter(),
-  },
+    cognito: CognitoAdapter()
+  }
 });

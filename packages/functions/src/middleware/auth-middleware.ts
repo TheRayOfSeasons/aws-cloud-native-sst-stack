@@ -1,9 +1,9 @@
 import { useSession, type SessionTypes } from 'sst/node/auth';
 import type { Middleware, BeforeMiddlewareFunction } from './types';
 
-export type Options = {
-  allowedUserTypes: (keyof SessionTypes)[];
-}
+export interface Options {
+  allowedUserTypes: Array<keyof SessionTypes>
+};
 
 export const authMiddleware = (options: Options): Middleware => {
   const before: BeforeMiddlewareFunction = async () => {
@@ -12,13 +12,13 @@ export const authMiddleware = (options: Options): Middleware => {
       return {
         statusCode: 401,
         body: JSON.stringify({
-          error: 'Unauthorized',
-        }),
+          error: 'Unauthorized'
+        })
       };
     }
-  }
+  };
 
   return {
-    before,
-  }
-}
+    before
+  };
+};
