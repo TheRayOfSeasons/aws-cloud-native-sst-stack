@@ -40,10 +40,11 @@ export const LoginPage: React.FC<Props> = () => {
           <p className="mb-4">{error}</p>
         )}
         <form onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="email"></label>
+          <label htmlFor="email">Email</label>
           <input
             id="email"
             type="text"
+            className="border border-black"
             {...register('email', {
               validate: (value) => {
                 const valid = validator.isEmail(value);
@@ -53,6 +54,7 @@ export const LoginPage: React.FC<Props> = () => {
               }
             })}
           />
+          <label htmlFor="password">Password</label>
           {errors.email?.message && (
             <p className="text-red mt-2">
               {errors.email.message}
@@ -61,6 +63,7 @@ export const LoginPage: React.FC<Props> = () => {
           <input
             id="password"
             type="text"
+            className="border border-black"
             {...register('password')}
           />
           <div className="mt-8 flex flex-row justify-between">
