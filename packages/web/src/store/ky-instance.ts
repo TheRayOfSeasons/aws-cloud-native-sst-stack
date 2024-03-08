@@ -12,7 +12,7 @@ export const kyInstance = ky.extend({
       },
     ],
     afterResponse: [
-      async (request, options, response) => {
+      async (_request, _options, response) => {
         if (response.status === 401) {
           const { logout } = useAuth();
           logout();
