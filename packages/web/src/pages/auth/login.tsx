@@ -62,7 +62,7 @@ export const LoginPage: React.FC<Props> = () => {
           )}
           <input
             id="password"
-            type="text"
+            type="password"
             className="border border-black"
             {...register('password')}
           />
