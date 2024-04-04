@@ -20,8 +20,8 @@ export const LoginPage: React.FC<Props> = () => {
   const { error, login, token } = useAuth();
   const navigate = useNavigate();
 
-  const onSubmit = useCallback(async (credentials: Credentials) => {
-    await login(credentials);
+  const onSubmit = useCallback((credentials: Credentials) => {
+    login(credentials);
   }, [login]);
 
   useEffect(() => {
@@ -41,31 +41,35 @@ export const LoginPage: React.FC<Props> = () => {
         )}
         <form onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="text"
-            className="border border-black"
-            {...register('email', {
-              validate: (value) => {
-                const valid = validator.isEmail(value);
-                if (!valid) {
-                  return 'Please enter a valid email.';
+          <div>
+            <input
+              id="email"
+              type="text"
+              className="border border-black"
+              {...register('email', {
+                validate: (value) => {
+                  const valid = validator.isEmail(value);
+                  if (!valid) {
+                    return 'Please enter a valid email.';
+                  }
                 }
-              }
-            })}
-          />
-          <label htmlFor="password">Password</label>
-          {errors.email?.message && (
-            <p className="text-red mt-2">
-              {errors.email.message}
-            </p>
-          )}
-          <input
-            id="password"
-            type="password"
-            className="border border-black"
-            {...register('password')}
-          />
+              })}
+            />
+            {errors.email?.message && (
+              <p className="text-red mt-2">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
+          <div className="mt-4">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              className="border border-black"
+              {...register('password')}
+            />
+          </div>
           <div className="mt-8 flex flex-row justify-between">
             <button
               className="mt-8 p-2 border border-black"

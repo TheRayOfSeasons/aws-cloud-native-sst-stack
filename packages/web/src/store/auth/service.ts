@@ -22,7 +22,7 @@ export class AuthService {
     const response = await this.kyInstance.post('/auth/cognito/login', {
       json: credentials,
     });
-    const data = response.json<LoginResponse>();
+    const data = await response.json<LoginResponse>();
     return data;
   }
 

@@ -102,6 +102,7 @@ export function MainStack({ stack }: StackContext) {
     buildCommand: 'npm run build',
     environment: {
       VITE_APP_API_URL: api.url,
+      VITE_PUBLIC_TEST: 'TEst VaLue',
     },
   });
 

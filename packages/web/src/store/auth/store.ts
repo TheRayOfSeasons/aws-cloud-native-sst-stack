@@ -30,7 +30,9 @@ interface Actions {
 
 interface AuthState extends State, Actions {}
 
-const authService = new AuthService(ky.extend({}));
+const authService = new AuthService(ky.extend({
+  prefixUrl: import.meta.env.VITE_APP_API_URL ?? ''
+}));
 
 export const useAuth = create<AuthState>((set) => ({
   token: '',

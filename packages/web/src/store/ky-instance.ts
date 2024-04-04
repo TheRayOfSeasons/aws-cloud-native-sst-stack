@@ -2,8 +2,7 @@ import ky from 'ky';
 import { useAuth } from './auth/store';
 
 export const kyInstance = ky.extend({
-  // @ts-expect-error VITE_APP_API_URL is guaranteed by SST stack definition
-  prefixUrl: import.meta?.VITE_APP_API_URL ?? '',
+  prefixUrl: import.meta.env.VITE_APP_API_URL ?? '',
   hooks: {
     beforeRequest: [
       async (request) => {
