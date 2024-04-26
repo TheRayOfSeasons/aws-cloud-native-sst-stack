@@ -9,33 +9,33 @@ export class NoteService {
   }
 
   async create(payload: NotePayload): Promise<KyResponse> {
-    const response = await this.kyInstance.post('/note', {
+    const response = await this.kyInstance.post('note', {
       json: payload
     });
     return response;
   }
 
   async list(): Promise<NoteList> {
-    const response = await this.kyInstance.get('/note');
+    const response = await this.kyInstance.get('note');
     const data = await response.json<NoteList>();
     return data;
   }
 
   async getOne(id: string): Promise<Note> {
-    const response = await this.kyInstance.get(`/note/${id}`);
+    const response = await this.kyInstance.get(`note/${id}`);
     const { data } = await response.json<NoteItem>();
     return data;
   }
 
   async update(id: string, payload: NotePayload): Promise<KyResponse> {
-    const response = await this.kyInstance.put(`/note/${id}`, {
+    const response = await this.kyInstance.put(`note/${id}`, {
       json: payload
     });
     return response;
   }
 
   async delete(id: string): Promise<KyResponse> {
-    const response = await this.kyInstance.delete(`/note/${id}`);
+    const response = await this.kyInstance.delete(`note/${id}`);
     return response;
   }
 }
