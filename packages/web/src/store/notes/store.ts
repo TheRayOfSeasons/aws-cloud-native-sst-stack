@@ -1,7 +1,6 @@
 import { create } from 'zustand';
-import { HTTPError } from 'ky';
 import type { Note, NoteList, NotePayload } from './types';
-import { kyInstance } from '../ky-instance';
+import { fetchClient } from '../client';
 import { NoteService } from './service';
 import { extractHTTPErrorMessage } from '../../utils/http-utils';
 
@@ -21,7 +20,7 @@ interface Actions {
 
 interface NoteState extends State, Actions {}
 
-const noteService = new NoteService(kyInstance);
+const noteService = new NoteService(fetchClient);
 
 export const useNotes = create<NoteState>((set) => ({
   noteList: {
@@ -34,7 +33,7 @@ export const useNotes = create<NoteState>((set) => ({
     try {
       await noteService.create(payload);
     } catch (error) {
-      if (error instanceof HTTPError) {
+      if (error) {
         const message = await extractHTTPErrorMessage(error);
         set({
           error: message
@@ -51,7 +50,7 @@ export const useNotes = create<NoteState>((set) => ({
     try {
       noteList = await noteService.list();
     } catch (error) {
-      if (error instanceof HTTPError) {
+      if (error) {
         const message = await extractHTTPErrorMessage(error);
         set({
           error: message
@@ -69,7 +68,7 @@ export const useNotes = create<NoteState>((set) => ({
     try {
       note = await noteService.getOne(id);
     } catch (error) {
-      if (error instanceof HTTPError) {
+      if (error) {
         const message = await extractHTTPErrorMessage(error);
         set({
           error: message
@@ -86,7 +85,7 @@ export const useNotes = create<NoteState>((set) => ({
     try {
       await noteService.update(id, payload);
     } catch (error) {
-      if (error instanceof HTTPError) {
+      if (error) {
         const message = await extractHTTPErrorMessage(error);
         set({
           error: message
@@ -102,7 +101,7 @@ export const useNotes = create<NoteState>((set) => ({
     try {
       await noteService.delete(id);
     } catch (error) {
-      if (error instanceof HTTPError) {
+      if (error) {
         const message = await extractHTTPErrorMessage(error);
         set({
           error: message

@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { User } from './types';
-import ky, { HTTPError } from 'ky';
 import type {
   ConfirmForgotPasswordPayload,
   ConfirmPayload,
@@ -10,7 +9,7 @@ import type {
   ResendCodePayload
 } from './types';
 import { AuthService } from './service';
-import { extractHTTPErrorMessage } from '../../utils/http-utils';
+import { FetchClient, extractHTTPErrorMessage } from '../../utils/http-utils';
 
 interface State {
   token: string
@@ -30,9 +29,10 @@ interface Actions {
 
 interface AuthState extends State, Actions {}
 
-const authService = new AuthService(ky.extend({
-  prefixUrl: import.meta.env.VITE_APP_API_URL ?? ''
-}));
+const client = new FetchClient({
+  prefixUrl: import.meta.env.VITE_APP_API_URL ?? '',
+});
+const authService = new AuthService(client);
 
 export const useAuth = create<AuthState>((set) => ({
   token: '',
@@ -45,7 +45,7 @@ export const useAuth = create<AuthState>((set) => ({
     try {
       data = await authService.login(credentials);
     } catch (error) {
-      if (error instanceof HTTPError) {
+      if (error) {
         const message = await extractHTTPErrorMessage(error);
         set({
           error: message
@@ -73,7 +73,7 @@ export const useAuth = create<AuthState>((set) => ({
     try {
       await authService.register(credentials);
     } catch (error) {
-      if (error instanceof HTTPError) {
+      if (error) {
         const message = await extractHTTPErrorMessage(error);
         set({
           error: message
@@ -85,7 +85,7 @@ export const useAuth = create<AuthState>((set) => ({
     try {
       await authService.confirmRegistration(payload);
     } catch (error) {
-      if (error instanceof HTTPError) {
+      if (error) {
         const message = await extractHTTPErrorMessage(error);
         set({
           error: message
@@ -100,7 +100,7 @@ export const useAuth = create<AuthState>((set) => ({
     try {
       await authService.resendCode(payload);
     } catch (error) {
-      if (error instanceof HTTPError) {
+      if (error) {
         const message = await extractHTTPErrorMessage(error);
         set({
           error: message
@@ -115,7 +115,7 @@ export const useAuth = create<AuthState>((set) => ({
     try {
       await authService.forgotPassword(payload);
     } catch (error) {
-      if (error instanceof HTTPError) {
+      if (error) {
         const message = await extractHTTPErrorMessage(error);
         set({
           error: message
@@ -130,7 +130,7 @@ export const useAuth = create<AuthState>((set) => ({
     try {
       await authService.confirmForgotPassword(payload);
     } catch (error) {
-      if (error instanceof HTTPError) {
+      if (error) {
         const message = await extractHTTPErrorMessage(error);
         set({
           error: message

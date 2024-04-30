@@ -7,7 +7,6 @@ import {
   StackContext,
   StaticSite,
 } from 'sst/constructs';
-import { CorsHttpMethod } from '@aws-cdk/aws-apigatewayv2-alpha';
 
 export function MainStack({ stack }: StackContext) {
   const bus = new EventBus(stack, 'bus', {
@@ -59,10 +58,8 @@ export function MainStack({ stack }: StackContext) {
 
   const api = new Api(stack, 'api', {
     cors: {
-      allowMethods: [
-        CorsHttpMethod.GET,
-        CorsHttpMethod.POST,
-      ],
+      allowMethods: ['GET', 'DELETE', 'POST', 'PUT', 'PATCH', 'OPTIONS'],
+      allowOrigins: ['*'],
     },
     defaults: {
       function: {

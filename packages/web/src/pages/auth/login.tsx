@@ -20,8 +20,8 @@ export const LoginPage: React.FC<Props> = () => {
   const { error, login, token } = useAuth();
   const navigate = useNavigate();
 
-  const onSubmit = useCallback((credentials: Credentials) => {
-    login(credentials);
+  const onSubmit = useCallback(async (credentials: Credentials) => {
+    await login(credentials);
   }, [login]);
 
   useEffect(() => {
