@@ -11,7 +11,7 @@ export const NoteList: React.FC<Props> = () => {
     <>
       {noteList.data.map(({ id, title }) => (
         <Link key={id} to={`notes/${id}`}>
-          <div className="block w-full border border-black px-4 py-2 hover:bg-gray">
+          <div className="block w-full border border-black px-4 py-2 hover:bg-gray mb-4">
             <h3 className="md:text-2xl text-lg font-bold">{title}</h3>
           </div>
         </Link>

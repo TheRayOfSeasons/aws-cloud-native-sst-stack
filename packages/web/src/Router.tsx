@@ -12,6 +12,8 @@ import { ForgotPasswordPage } from './pages/auth/forgot-password';
 import { RegisterPage } from './pages/auth/register';
 import { DashboardLayout } from './layouts/DashboardLayout';
 import { NotesDetailPage } from './pages/notes/detail';
+import { NotesCreatePage } from './pages/notes/create';
+import { NotesEditPage } from './pages/notes/edit';
 
 export const Routes: React.FC = () => {
   return (
@@ -19,6 +21,8 @@ export const Routes: React.FC = () => {
       <DashboardLayout path="/">
         <IndexPage path="/" />
         <NotesDetailPage path="/notes/:id" />
+        <NotesCreatePage path="/notes/create" />
+        <NotesEditPage path="/notes/edit/:id" />
       </DashboardLayout>
       <AuthLayout path="/auth">
         <LoginPage path="/" />

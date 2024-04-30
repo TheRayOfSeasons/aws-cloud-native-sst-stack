@@ -72,7 +72,7 @@ export const LoginPage: React.FC<Props> = () => {
           </div>
           <div className="mt-8 flex flex-row justify-between">
             <button
-              className="mt-8 p-2 border border-black"
+              className="mt-8 p-2 border border-black hover:bg-gray"
               type="submit"
               disabled={isSubmitting || isSubmitSuccessful}
             >

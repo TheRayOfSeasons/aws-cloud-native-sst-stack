@@ -15,7 +15,7 @@ interface Actions {
   list: () => Promise<void>
   getOne: (id: string) => Promise<void>
   update: (id: string, payload: NotePayload) => Promise<void>
-  delete: (id: string) => Promise<void>
+  deleteNote: (id: string) => Promise<void>
 }
 
 interface NoteState extends State, Actions {}
@@ -97,7 +97,7 @@ export const useNotes = create<NoteState>((set) => ({
       error: ''
     });
   },
-  delete: async (id) => {
+  deleteNote: async (id) => {
     try {
       await noteService.delete(id);
     } catch (error) {
