@@ -18,7 +18,7 @@ export const Routes: React.FC = () => {
     <Router>
       <DashboardLayout path="/">
         <IndexPage path="/" />
-        <NotesDetailPage path="/" />
+        <NotesDetailPage path="/notes/:id" />
       </DashboardLayout>
       <AuthLayout path="/auth">
         <LoginPage path="/" />
