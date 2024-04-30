@@ -17,19 +17,11 @@ export class AuthService {
   }
 
   async login(credentials: Credentials): Promise<LoginResponse> {
-    // const host = import.meta.env.VITE_APP_API_URL ?? '';
-    // const url = new URL('/auth/cognito/login', host);
-    // const response = await fetch(url, {
-    //   method: 'POST',
-    //   body: JSON.stringify(credentials)
-    // });
-    // const data: LoginResponse = await response.json();
     const response = await this.client.request('auth/cognito/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
     });
     const data: LoginResponse = await response.json();
-    console.log('response: ', data);
     return data;
   }
 
