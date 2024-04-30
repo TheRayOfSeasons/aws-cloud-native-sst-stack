@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { User } from './types';
 import type {
   ConfirmForgotPasswordPayload,
@@ -34,111 +35,123 @@ const client = new FetchClient({
 });
 const authService = new AuthService(client);
 
-export const useAuth = create<AuthState>((set) => ({
-  token: '',
-  user: {
-    email: ''
-  },
-  error: '',
-  login: async (credentials) => {
-    let data: LoginResponse;
-    try {
-      data = await authService.login(credentials);
-    } catch (error) {
-      if (error) {
-        const message = await extractHTTPErrorMessage(error);
-        set({
-          error: message
-        });
-      }
-      return;
-    }
-    set({
-      token: data.token,
-      user: {
-        email: data.email
-      },
-      error: '',
-    });
-  },
-  logout: async () => {
-    set({
+export const useAuth = create<AuthState>()(
+  persist(
+    (set) => ({
       token: '',
       user: {
         email: ''
-      }
-    });
-  },
-  register: async (credentials) => {
-    try {
-      await authService.register(credentials);
-    } catch (error) {
-      if (error) {
-        const message = await extractHTTPErrorMessage(error);
-        set({
-          error: message
-        });
-      }
-    }
-  },
-  confirmRegistration: async (payload) => {
-    try {
-      await authService.confirmRegistration(payload);
-    } catch (error) {
-      if (error) {
-        const message = await extractHTTPErrorMessage(error);
-        set({
-          error: message
-        });
-      }
-    }
-    set({
+      },
       error: '',
-    });
-  },
-  resendCode: async (payload) => {
-    try {
-      await authService.resendCode(payload);
-    } catch (error) {
-      if (error) {
-        const message = await extractHTTPErrorMessage(error);
+      login: async (credentials) => {
+        let data: LoginResponse;
+        try {
+          data = await authService.login(credentials);
+        } catch (error) {
+          if (error) {
+            const message = await extractHTTPErrorMessage(error);
+            set({
+              error: message
+            });
+          }
+          return;
+        }
         set({
-          error: message
+          token: data.token,
+          user: {
+            email: data.email
+          },
+          error: '',
         });
-      }
-    }
-    set({
-      error: '',
-    });
-  },
-  forgotPassword: async (payload) => {
-    try {
-      await authService.forgotPassword(payload);
-    } catch (error) {
-      if (error) {
-        const message = await extractHTTPErrorMessage(error);
+      },
+      logout: async () => {
         set({
-          error: message
+          token: '',
+          user: {
+            email: ''
+          }
         });
-      }
-    }
-    set({
-      error: '',
-    });
-  },
-  confirmForgotPassword: async (payload) => {
-    try {
-      await authService.confirmForgotPassword(payload);
-    } catch (error) {
-      if (error) {
-        const message = await extractHTTPErrorMessage(error);
+      },
+      register: async (credentials) => {
+        try {
+          await authService.register(credentials);
+        } catch (error) {
+          if (error) {
+            const message = await extractHTTPErrorMessage(error);
+            set({
+              error: message
+            });
+          }
+        }
+      },
+      confirmRegistration: async (payload) => {
+        try {
+          await authService.confirmRegistration(payload);
+        } catch (error) {
+          if (error) {
+            const message = await extractHTTPErrorMessage(error);
+            set({
+              error: message
+            });
+          }
+        }
         set({
-          error: message
+          error: '',
         });
-      }
+      },
+      resendCode: async (payload) => {
+        try {
+          await authService.resendCode(payload);
+        } catch (error) {
+          if (error) {
+            const message = await extractHTTPErrorMessage(error);
+            set({
+              error: message
+            });
+          }
+        }
+        set({
+          error: '',
+        });
+      },
+      forgotPassword: async (payload) => {
+        try {
+          await authService.forgotPassword(payload);
+        } catch (error) {
+          if (error) {
+            const message = await extractHTTPErrorMessage(error);
+            set({
+              error: message
+            });
+          }
+        }
+        set({
+          error: '',
+        });
+      },
+      confirmForgotPassword: async (payload) => {
+        try {
+          await authService.confirmForgotPassword(payload);
+        } catch (error) {
+          if (error) {
+            const message = await extractHTTPErrorMessage(error);
+            set({
+              error: message
+            });
+          }
+        }
+        set({
+          error: '',
+        });
+      },
+    }),
+    {
+      name: 'auth',
+      storage: createJSONStorage(() => sessionStorage),
+      partialize: (state) => ({
+        token: state.token,
+        user: state.user,
+      }),
     }
-    set({
-      error: '',
-    });
-  },
-}));
+  )
+);
