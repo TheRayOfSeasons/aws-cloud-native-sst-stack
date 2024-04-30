@@ -6,12 +6,14 @@ import { useNotes } from '../store/notes/store';
 interface Props extends RouteComponentProps {}
 
 export const IndexPage: React.FC<Props> = () => {
-  const { logout } = useAuth();
+  const { token, logout } = useAuth();
   const { list, noteList } = useNotes();
 
   useEffect(() => {
-    list();
-  }, [list]);
+    if (token) {
+      list();
+    }
+  }, [list, token]);
 
   return (
     <>
