@@ -17,7 +17,7 @@ export const LoginPage: React.FC<Props> = () => {
       isSubmitSuccessful,
     },
   } = useForm<Credentials>();
-  const { error, login, token } = useAuth();
+  const { error: serverError, login, token } = useAuth();
   const navigate = useNavigate();
 
   const onSubmit = useCallback(async (credentials: Credentials) => {
@@ -25,10 +25,10 @@ export const LoginPage: React.FC<Props> = () => {
   }, [login]);
 
   useEffect(() => {
-    if (token && !error) {
+    if (token && !serverError) {
       navigate('/');
     }
-  }, [error, navigate, token]);
+  }, [serverError, navigate, token]);
 
   return (
     <>
@@ -36,8 +36,8 @@ export const LoginPage: React.FC<Props> = () => {
         <h1 className="text-3xl font-bold">Login</h1>
       </div>
       <div className="p-4">
-        {error && (
-          <p className="mb-4">{error}</p>
+        {serverError && (
+          <p className="mb-4">{serverError}</p>
         )}
         <form onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="email">Email</label>
