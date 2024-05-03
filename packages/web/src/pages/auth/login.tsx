@@ -40,8 +40,8 @@ export const LoginPage: React.FC<Props> = () => {
           <p className="mb-4">{serverError}</p>
         )}
         <form onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="email">Email</label>
           <div>
+            <label htmlFor="email">Email</label>
             <input
               id="email"
               type="text"
