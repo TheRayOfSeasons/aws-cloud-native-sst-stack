@@ -76,16 +76,21 @@ export const useAuth = create<AuthState>()(
       },
       register: async (credentials) => {
         try {
-          await authService.register(credentials);
+          const response = await authService.register(credentials);
+          console.log('response: ', response);
         } catch (error) {
+          console.log('error: ', error);
           if (error) {
             const message = await extractHTTPErrorMessage(error);
+            console.log('message: ', message);
             set({
               error: message
             });
           }
+          throw error;
         }
         set({
+          error: '',
           registrationEmail: credentials.email,
         });
       },
@@ -99,6 +104,7 @@ export const useAuth = create<AuthState>()(
               error: message
             });
           }
+          throw error;
         }
         set({
           error: '',
@@ -115,6 +121,7 @@ export const useAuth = create<AuthState>()(
               error: message
             });
           }
+          throw error;
         }
         set({
           error: '',
@@ -130,6 +137,7 @@ export const useAuth = create<AuthState>()(
               error: message
             });
           }
+          throw error;
         }
         set({
           error: '',
@@ -145,6 +153,7 @@ export const useAuth = create<AuthState>()(
               error: message
             });
           }
+          throw error;
         }
         set({
           error: '',
