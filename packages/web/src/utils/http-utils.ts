@@ -2,12 +2,12 @@ export const extractHTTPErrorMessage = async (error: unknown): Promise<string> =
   if (typeof error === 'string') {
     return error;
   }
-  if (error instanceof Error) {
-    return error.message || error.name;
-  }
   if (error instanceof Response) {
     const data = await error.json();
     return data?.error ?? data?.message ?? error.statusText;
+  }
+  if (error instanceof Error) {
+    return error.message || error.name;
   }
   return 'Internal Server Error';
 };
@@ -47,6 +47,9 @@ export class FetchClient {
     const response = await fetch(request);
     for (const hook of this.options?.hooks?.afterResponse || []) {
       await hook(request, response);
+    }
+    if (response.status >= 400) {
+      throw response;
     }
     return response;
   }
