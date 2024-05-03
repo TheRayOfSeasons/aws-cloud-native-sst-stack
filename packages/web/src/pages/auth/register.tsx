@@ -32,7 +32,6 @@ export const RegisterPage: React.FC<Props> = () => {
         password: input.password,
       });
     } catch (e) {
-      // Do nothing here. Already handled in store.
       return;
     }
     navigate('/auth/confirm');

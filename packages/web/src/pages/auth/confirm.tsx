@@ -26,7 +26,6 @@ export const ConfirmPage: React.FC<Props> = () => {
       email: registrationEmail,
     }
   });
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,7 +36,6 @@ export const ConfirmPage: React.FC<Props> = () => {
     try {
       await confirmRegistration(payload);
     } catch (e) {
-      // Do nothing here. Already handled in store.
       return;
     }
     navigate('/auth?confirmSuccess=1');
