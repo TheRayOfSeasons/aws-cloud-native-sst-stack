@@ -16,6 +16,7 @@ interface State {
   token: string
   user: User
   error: string,
+  registrationEmail: string
 }
 
 interface Actions {
@@ -43,6 +44,7 @@ export const useAuth = create<AuthState>()(
         email: ''
       },
       error: '',
+      registrationEmail: '',
       login: async (credentials) => {
         let data: LoginResponse;
         try {
@@ -83,6 +85,9 @@ export const useAuth = create<AuthState>()(
             });
           }
         }
+        set({
+          registrationEmail: credentials.email,
+        });
       },
       confirmRegistration: async (payload) => {
         try {
@@ -97,6 +102,7 @@ export const useAuth = create<AuthState>()(
         }
         set({
           error: '',
+          registrationEmail: '',
         });
       },
       resendCode: async (payload) => {
@@ -151,6 +157,7 @@ export const useAuth = create<AuthState>()(
       partialize: (state) => ({
         token: state.token,
         user: state.user,
+        registrationEmail: state.registrationEmail,
       }),
     }
   )

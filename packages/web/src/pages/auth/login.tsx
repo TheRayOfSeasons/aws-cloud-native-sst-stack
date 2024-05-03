@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
-import { useNavigate, type RouteComponentProps } from '@reach/router';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { useNavigate, type RouteComponentProps, useLocation, Link } from '@reach/router';
 import { useForm }  from 'react-hook-form';
 import type { Credentials } from '../../store/auth/types';
 import { useAuth } from '../../store/auth/store';
@@ -30,6 +30,13 @@ export const LoginPage: React.FC<Props> = () => {
     }
   }, [serverError, navigate, token]);
 
+  const location = useLocation();
+
+  const confirmSuccess = useMemo(() => {
+    const search = new URLSearchParams(location.search);
+    return search.get('confirmSuccess');
+  }, [location]);
+
   return (
     <>
       <div className="w-full p-4 border-b border-black">
@@ -38,6 +45,9 @@ export const LoginPage: React.FC<Props> = () => {
       <div className="p-4">
         {serverError && (
           <p className="mb-4">{serverError}</p>
+        )}
+        {confirmSuccess && (
+          <p className="text-green mb-4">Registration successful. You may now login.</p>
         )}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
@@ -83,6 +93,11 @@ export const LoginPage: React.FC<Props> = () => {
             )}
           </div>
         </form>
+        <div className="mt-8">
+          <p>
+            No account yet? Register <Link to="/auth/register">here</Link>.
+          </p>
+        </div>
       </div>
     </>
   );
