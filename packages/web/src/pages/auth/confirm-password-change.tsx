@@ -74,10 +74,10 @@ export const ConfirmPasswordChangePage: React.FC<Props> = () => {
           </button>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div>
-              <label htmlFor="password">Password</label>
+              <label htmlFor="code">Code</label>
               <input
-                id="password"
-                type="password"
+                id="code"
+                type="text"
                 className="border border-black"
                 {...register('code', {
                   required: 'This field is required',
