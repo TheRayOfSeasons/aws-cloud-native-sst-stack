@@ -170,6 +170,7 @@ export const useAuth = create<AuthState>()(
         token: state.token,
         user: state.user,
         registrationEmail: state.registrationEmail,
+        forgotPasswordEmail: state.forgotPasswordEmail,
       }),
     }
   )
