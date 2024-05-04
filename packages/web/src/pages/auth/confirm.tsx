@@ -11,6 +11,7 @@ export const ConfirmPage: React.FC<Props> = () => {
     error: serverError,
     registrationEmail,
     confirmRegistration,
+    resendCode,
   } = useAuth();
 
   const {
@@ -41,6 +42,12 @@ export const ConfirmPage: React.FC<Props> = () => {
     navigate('/auth?confirmSuccess=1');
   }, [confirmRegistration, navigate]);
 
+  const resend = useCallback(async () => {
+    await resendCode({
+      email: registrationEmail,
+    });
+  }, [resendCode, registrationEmail]);
+
   return (
     <>
       <div className="w-full p-4 border-b border-black">
@@ -51,6 +58,13 @@ export const ConfirmPage: React.FC<Props> = () => {
         {serverError && (
           <p className="mb-4">{serverError}</p>
         )}
+        <button
+          type="button"
+          className="mb-4 text text-underline"
+          onClick={resend}
+        >
+          Resend Code
+        </button>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <label htmlFor="email">Code</label>
