@@ -32,10 +32,13 @@ export const LoginPage: React.FC<Props> = () => {
 
   const location = useLocation();
 
-  const confirmSuccess = useMemo(() => {
+  const searchParams = useMemo(() => {
     const search = new URLSearchParams(location.search);
-    return search.get('confirmSuccess');
+    return search;
   }, [location]);
+
+  const confirmSuccess = useMemo(() => searchParams.get('confirmSuccess'), [searchParams]);
+  const passwordChangeSuccess = useMemo(() => searchParams.get('passwordChangeSuccess'), [searchParams]);
 
   return (
     <>
@@ -48,6 +51,9 @@ export const LoginPage: React.FC<Props> = () => {
         )}
         {confirmSuccess && (
           <p className="text-green mb-4">Registration successful. You may now login.</p>
+        )}
+        {passwordChangeSuccess && (
+          <p className="text-green mb-4">Password change successful. You may now login.</p>
         )}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
@@ -96,6 +102,9 @@ export const LoginPage: React.FC<Props> = () => {
         <div className="mt-8">
           <p>
             No account yet? Register <Link to="/auth/register" className="text-blue underline">here</Link>.
+          </p>
+          <p>
+            <Link to="/auth/forgot-password" className="text-blue underline">Forgot Password</Link>.
           </p>
         </div>
       </div>

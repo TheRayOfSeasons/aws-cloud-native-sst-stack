@@ -17,6 +17,7 @@ interface State {
   user: User
   error: string,
   registrationEmail: string
+  forgotPasswordEmail: string
 }
 
 interface Actions {
@@ -45,6 +46,7 @@ export const useAuth = create<AuthState>()(
       },
       error: '',
       registrationEmail: '',
+      forgotPasswordEmail: '',
       login: async (credentials) => {
         let data: LoginResponse;
         try {
@@ -138,6 +140,7 @@ export const useAuth = create<AuthState>()(
         }
         set({
           error: '',
+          forgotPasswordEmail: payload.email,
         });
       },
       confirmForgotPassword: async (payload) => {
@@ -154,6 +157,7 @@ export const useAuth = create<AuthState>()(
         }
         set({
           error: '',
+          forgotPasswordEmail: '',
         });
       },
     }),
