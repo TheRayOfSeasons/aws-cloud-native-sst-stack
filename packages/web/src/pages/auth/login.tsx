@@ -95,7 +95,7 @@ export const LoginPage: React.FC<Props> = () => {
         </form>
         <div className="mt-8">
           <p>
-            No account yet? Register <Link to="/auth/register">here</Link>.
+            No account yet? Register <Link to="/auth/register" className="text-blue underline">here</Link>.
           </p>
         </div>
       </div>

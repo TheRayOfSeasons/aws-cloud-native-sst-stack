@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import validator from 'validator';
 import type { Credentials } from '../../store/auth/types';
-import { useNavigate, type RouteComponentProps } from '@reach/router';
+import { Link, useNavigate, type RouteComponentProps } from '@reach/router';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../store/auth/store';
 
@@ -119,6 +119,11 @@ export const RegisterPage: React.FC<Props> = () => {
             )}
           </div>
         </form>
+        <div className="mt-8">
+          <p>
+            Already have an account? <Link to="/auth/register" className="text-blue underline">Login</Link>.
+          </p>
+        </div>
       </div>
     </>
   );
