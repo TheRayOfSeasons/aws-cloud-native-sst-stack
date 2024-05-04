@@ -11,6 +11,7 @@ import type {
 } from './types';
 import { AuthService } from './service';
 import { FetchClient, extractHTTPErrorMessage } from '../../utils/http-utils';
+import { useNotes } from '../notes/store';
 
 interface State {
   token: string
@@ -75,6 +76,7 @@ export const useAuth = create<AuthState>()(
             email: ''
           }
         });
+        useNotes.getState().clear();
       },
       register: async (credentials) => {
         try {

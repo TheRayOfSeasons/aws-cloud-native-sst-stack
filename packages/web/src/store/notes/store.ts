@@ -11,6 +11,7 @@ interface State {
 }
 
 interface Actions {
+  clear: () => void
   create: (payload: NotePayload) => Promise<void>
   list: () => Promise<void>
   getOne: (id: string) => Promise<void>
@@ -22,13 +23,20 @@ interface NoteState extends State, Actions {}
 
 const noteService = new NoteService(fetchClient);
 
-export const useNotes = create<NoteState>((set) => ({
+const DEFAULT_STATE: State = {
   noteList: {
     count: 0,
     data: [],
   },
   currentNote: undefined,
   error: '',
+};
+
+export const useNotes = create<NoteState>((set) => ({
+  ...DEFAULT_STATE,
+  clear: () => {
+    set(DEFAULT_STATE);
+  },
   create: async (payload) => {
     try {
       await noteService.create(payload);
