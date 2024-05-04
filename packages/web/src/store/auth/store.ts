@@ -76,13 +76,10 @@ export const useAuth = create<AuthState>()(
       },
       register: async (credentials) => {
         try {
-          const response = await authService.register(credentials);
-          console.log('response: ', response);
+          await authService.register(credentials);
         } catch (error) {
-          console.log('error: ', error);
           if (error) {
             const message = await extractHTTPErrorMessage(error);
-            console.log('message: ', message);
             set({
               error: message
             });
