@@ -121,7 +121,7 @@ export const RegisterPage: React.FC<Props> = () => {
         </form>
         <div className="mt-8">
           <p>
-            Already have an account? <Link to="/auth/register" className="text-blue underline">Login</Link>.
+            Already have an account? <Link to="/auth" className="text-blue underline">Login</Link>.
           </p>
         </div>
       </div>
