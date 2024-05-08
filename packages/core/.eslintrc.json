@@ -16,7 +16,7 @@
     "max-classes-per-file": "off",
     "no-plusplus": "off",
     "no-continue": "off",
-    "no-param-reassign": "off",
+    "no-param-reassign": "off"
   },
   "overrides": [
     {

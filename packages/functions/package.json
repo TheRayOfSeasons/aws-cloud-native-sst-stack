@@ -5,7 +5,7 @@
   "scripts": {
     "test": "sst bind vitest",
     "typecheck": "tsc -noEmit",
-    "lint": "eslint \"*.ts\" --fix"
+    "lint": "eslint \"**/*.ts\" --fix"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.133",

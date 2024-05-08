@@ -6,7 +6,7 @@
     "test": "sst bind vitest",
     "typecheck": "tsc -noEmit",
     "run-m": "node main.js",
-    "lint": "eslint \"*.ts\" --fix"
+    "lint": "eslint \"**/*.ts\" --fix"
   },
   "devDependencies": {
     "@types/luxon": "^3.4.2",

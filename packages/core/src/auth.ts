@@ -13,7 +13,7 @@ import {
   type ResendConfirmationCodeCommandOutput,
   type ConfirmSignUpCommandOutput,
   type ForgotPasswordCommandOutput,
-  GetUserCommandOutput
+  type GetUserCommandOutput
 } from '@aws-sdk/client-cognito-identity-provider';
 export * as Auth from './auth';
 
